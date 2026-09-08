@@ -160,8 +160,8 @@ This project is developed for academic and educational purposes.
 
 👨‍💻 Developed By
 
-Rajagopalan
+Shamimulla
 
-B.Tech Information Technology
+B.Tech Artificial intelligence & Data science
 
 GlowMatch AI — Makeup Analysis & Recommendation System
