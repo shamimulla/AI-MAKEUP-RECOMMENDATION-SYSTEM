@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 def train():
     os.makedirs("backend/model", exist_ok=True)
     
-    # Needs training_data/{Fair, Medium, Dark} folders
+    # Needs training_data/{Fair,, Medium, Dark} folders
     data_dir = "training_data"
     img_size = (128, 128)
     batch_size = 32
