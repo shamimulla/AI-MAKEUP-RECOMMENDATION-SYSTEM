@@ -20,6 +20,7 @@ load_dotenv(override=True)
 
 app = FastAPI(title="AI Makeup Analysis System")
 
+<<<<<<< HEAD
 # CORS config
 # Build allowed origins list from env (comma-separated) + local dev default
 default_origins = [
@@ -40,6 +41,12 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+=======
+# CORS config — open to all origins (auth removed)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+>>>>>>> 88626cf847d9b741e7b52fc7c823bf3a4851605c
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,13 +54,23 @@ app.add_middleware(
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+@app.get("/test")
+async def test_endpoint():
+    return {"status": "ok", "message": "Backend is reachable"}
+
 @app.on_event("startup")
 async def startup_event():
-    # Initialize Database
-    from database import engine, Base
-    import models
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created.")
+    # Initialize Database — skip gracefully if unavailable
+    from database import DB_AVAILABLE, engine, Base
+    if DB_AVAILABLE and engine is not None:
+        try:
+            import models
+            Base.metadata.create_all(bind=engine)
+            print("Database tables created.")
+        except Exception as e:
+            print(f"WARNING: Could not create DB tables: {e}")
+    else:
+        print("INFO: Skipping DB table creation — no database connection.")
 
     # Load model
     model_path = os.path.join(BASE_DIR, "model/skin_tone_model.h5")
